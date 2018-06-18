@@ -6,12 +6,47 @@ import Element.Attributes exposing (..)
 import Style exposing (..)
 import Style.Font as Font
 import Style.Shadow as Shadow
+import Style.Border as Border
+import Style.Color
 import Color
+
+
+---- STYLE ----
 
 
 type Styles
     = NoStyle
+    | Title
     | Text
+    | Row
+
+
+stylesheet =
+    Style.styleSheet
+        [ style NoStyle []
+        , style Title
+            [ Font.typeface [ fancyFont ]
+            , Font.size 70
+            , Shadow.text
+                { offset = ( 3, 5 )
+                , blur = 2
+                , color = Color.lightCharcoal
+                }
+            ]
+        , style Text
+            [ Font.typeface [ rowFont ]
+            , Font.size 25
+            ]
+        , style Row
+            [ Border.all 5
+            , Border.rounded 20
+            , Style.Color.border Color.lightGrey
+            ]
+        ]
+
+
+
+---- FONTS ---
 
 
 fontImport fontName =
@@ -21,34 +56,45 @@ fontImport fontName =
         }
 
 
-myFont =
+fancyFont =
     fontImport "Tangerine"
 
 
-stylesheet =
-    Style.styleSheet
-        [ style NoStyle []
-        , style Text
-            [ Font.typeface [ myFont ]
-            , Font.size 70
-            , Shadow.text
-                { offset = ( 3, 5 )
-                , blur = 2
-                , color = Color.lightCharcoal
-                }
-            ]
-        ]
+rowFont =
+    fontImport "Montserrat"
 
 
 
 ---- VIEW ----
 
 
-view _ =
+titleElement =
+    el Title [ center, padding 10 ] <|
+        text "The Fancy Page Title"
+
+
+wholeRow =
+    el NoStyle [ center ] wordsRow
+
+
+wordsRow =
+    row Row
+        [ paddingXY 40 15, spacing 40 ]
+        [ el Text [] <| text "Separated"
+        , el Text [ paddingTop 10 ] <| text "Words"
+        , el Text [] <| text "on"
+        , el Text [ paddingTop 10 ] <| text "a"
+        , el Text [] <| text "Row"
+        ]
+
+
+view model =
     Element.layout stylesheet <|
-        el Text
-            [ center, padding 30 ]
-            (text "The Elm App is working!")
+        column NoStyle
+            []
+            [ titleElement
+            , wholeRow
+            ]
 
 
 
