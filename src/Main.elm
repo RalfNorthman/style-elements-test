@@ -3,6 +3,8 @@ module Main exposing (..)
 import Html
 import Element exposing (..)
 import Element.Attributes exposing (..)
+import List exposing (map2)
+import String exposing (words)
 import Style exposing (..)
 import Style.Font as Font
 import Style.Shadow as Shadow
@@ -18,9 +20,9 @@ import Color
 type Styles
     = NoStyle
     | Title
-    | Text
     | Row
     | RowElement
+    | RowText
 
 
 stylesheet =
@@ -35,16 +37,6 @@ stylesheet =
                 , color = Color.lightCharcoal
                 }
             ]
-        , style Text
-            [ Font.typeface [ rowFont ]
-            , Font.size 25
-            , Style.Color.text Color.lightYellow
-            , Shadow.text
-                { offset = ( 1.5, 2.5 )
-                , blur = 1
-                , color = Color.black
-                }
-            ]
         , style Row
             [ Border.all 2
             , Border.rounded 20
@@ -57,6 +49,17 @@ stylesheet =
                 { offset = ( 3, 5 )
                 , size = 2
                 , blur = 5
+                , color = Color.black
+                }
+            , Border.rounded 5
+            ]
+        , style RowText
+            [ Font.typeface [ rowFont ]
+            , Font.size 25
+            , Style.Color.text Color.lightYellow
+            , Shadow.text
+                { offset = ( 1.5, 2.5 )
+                , blur = 1
                 , color = Color.black
                 }
             ]
@@ -91,25 +94,27 @@ titleElement =
         text "The Fancy Page Title"
 
 
-wholeRow =
-    el NoStyle [ center ] wordsRow
-
-
 rowElement topPad word =
     el RowElement [ paddingXY 10 0 ] <|
-        el Text [ paddingTop topPad ] <|
+        el RowText [ paddingTop topPad ] <|
             text word
 
 
+topPads =
+    [ 0, 10, 0, 10, 0 ]
+
+
+rowWords =
+    "Separated Words on a Row" |> words
+
+
 wordsRow =
-    row Row
-        [ paddingXY 40 15, spacing 40 ]
-        [ rowElement 0 "Separated"
-        , rowElement 10 "Words"
-        , rowElement 0 "on"
-        , rowElement 10 "a"
-        , rowElement 0 "Row"
-        ]
+    row Row [ paddingXY 40 15, spacing 40 ] <|
+        map2 rowElement topPads rowWords
+
+
+wholeRow =
+    el NoStyle [ center ] wordsRow
 
 
 view model =
