@@ -38,29 +38,33 @@ stylesheet =
                 }
             ]
         , style Row
-            [ Border.all 2
+            [ Border.bottom 2
+            , Border.right 2
             , Border.rounded 20
-            , Style.Color.border Color.black
-            , Style.Color.background Color.purple
-            , Style.Filter.blur 0.2
+            , Style.Color.border Color.grey
+            , Style.Color.background <| Color.greyscale 0.05
             ]
         , style RowElement
             [ Shadow.inset
                 { offset = ( 3, 5 )
-                , size = 2
-                , blur = 5
-                , color = Color.black
+                , size = 5
+                , blur = 20
+                , color = Color.darkGrey
                 }
-            , Style.Color.background Color.darkPurple
+            , Style.Color.background Color.lightGrey
+            , Border.top 1
+            , Border.left 1
             , Border.rounded 5
+            , Style.Color.border Color.lightCharcoal
             ]
         , style RowText
             [ Font.typeface [ rowFont ]
             , Font.size 25
-            , Style.Color.text Color.lightYellow
+            , Font.lineHeight 1.5
+            , Style.Color.text Color.white
             , Shadow.text
                 { offset = ( 1.5, 2.5 )
-                , blur = 1
+                , blur = 1.5
                 , color = Color.black
                 }
             ]
@@ -97,7 +101,7 @@ titleElement =
 
 createRowElement oddPad word =
     el RowElement [ paddingXY 5 0 ] <|
-        el RowText [ paddingTop oddPad ] <|
+        full RowText [ paddingTop oddPad ] <|
             text word
 
 
