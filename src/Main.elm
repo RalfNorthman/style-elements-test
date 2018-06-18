@@ -42,7 +42,7 @@ stylesheet =
             , Border.rounded 20
             , Style.Color.border Color.black
             , Style.Color.background Color.purple
-            , Style.Filter.blur 0.18
+            , Style.Filter.blur 0.2
             ]
         , style RowElement
             [ Shadow.inset
@@ -95,34 +95,34 @@ titleElement =
         text "The Fancy Page Title"
 
 
-createRowElement topPad word =
+createRowElement oddPad word =
     el RowElement [ paddingXY 5 0 ] <|
-        el RowText [ paddingTop topPad ] <|
+        el RowText [ paddingTop oddPad ] <|
             text word
 
 
-rowElements string pad =
+rowElements string oddPad =
     let
-        strings =
+        stringList =
             string |> String.words
 
-        pads =
+        oddPadList =
             let
                 n =
-                    List.length strings
+                    List.length stringList
             in
-                List.repeat (n // 2 + 1) [ 0, pad ] |> List.concat
+                List.repeat (n // 2 + 1) [ 0, oddPad ] |> List.concat
     in
-        List.map2 createRowElement pads strings
+        List.map2 createRowElement oddPadList stringList
 
 
-wordsRow string pad =
+wordsRow string oddPad =
     row Row [ paddingXY 40 15, spacing 40 ] <|
-        rowElements string pad
+        rowElements string oddPad
 
 
-wholeRow string pad =
-    el NoStyle [ center, padding 5 ] <| wordsRow string pad
+wholeRow string oddPad =
+    el NoStyle [ center, padding 5 ] <| wordsRow string oddPad
 
 
 rowSentence1 =
