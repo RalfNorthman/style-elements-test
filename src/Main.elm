@@ -3,8 +3,8 @@ module Main exposing (..)
 import Html
 import Element exposing (..)
 import Element.Attributes exposing (..)
-import List exposing (map2)
-import String exposing (words)
+import List
+import String
 import Style exposing (..)
 import Style.Font as Font
 import Style.Shadow as Shadow
@@ -41,7 +41,7 @@ stylesheet =
             [ Border.all 2
             , Border.rounded 20
             , Style.Color.border Color.black
-            , Style.Color.background Color.darkPurple
+            , Style.Color.background Color.purple
             , Style.Filter.blur 0.18
             ]
         , style RowElement
@@ -51,6 +51,7 @@ stylesheet =
                 , blur = 5
                 , color = Color.black
                 }
+            , Style.Color.background Color.darkPurple
             , Border.rounded 5
             ]
         , style RowText
@@ -94,27 +95,42 @@ titleElement =
         text "The Fancy Page Title"
 
 
-rowElement topPad word =
-    el RowElement [ paddingXY 10 0 ] <|
+createRowElement topPad word =
+    el RowElement [ paddingXY 5 0 ] <|
         el RowText [ paddingTop topPad ] <|
             text word
 
 
-topPads =
-    [ 0, 10, 0, 10, 0 ]
+rowElements string pad =
+    let
+        strings =
+            string |> String.words
+
+        pads =
+            let
+                n =
+                    List.length strings
+            in
+                List.repeat (n // 2 + 1) [ 0, pad ] |> List.concat
+    in
+        List.map2 createRowElement pads strings
 
 
-rowWords =
-    "Separated Words on a Row" |> words
-
-
-wordsRow =
+wordsRow string pad =
     row Row [ paddingXY 40 15, spacing 40 ] <|
-        map2 rowElement topPads rowWords
+        rowElements string pad
 
 
-wholeRow =
-    el NoStyle [ center ] wordsRow
+wholeRow string pad =
+    el NoStyle [ center, padding 5 ] <| wordsRow string pad
+
+
+rowSentence1 =
+    "Separated Words on a Row"
+
+
+rowSentence2 =
+    "Something else in a similar style"
 
 
 view model =
@@ -122,7 +138,8 @@ view model =
         column NoStyle
             []
             [ titleElement
-            , wholeRow
+            , wholeRow rowSentence1 10
+            , wholeRow rowSentence2 25
             ]
 
 
