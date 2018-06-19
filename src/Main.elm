@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html
+import List
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Styles exposing (..)
@@ -15,22 +16,26 @@ titleElement =
         text "The Fancy Page Title"
 
 
-rowSentence1 =
-    "Separated Words on a Row"
+rowSentences =
+    [ "Separated Words on a Row"
+    , "Something else in a similar style"
+    , "a b c d e f g h i j k"
+    ]
 
 
-rowSentence2 =
-    "Something else in a similar style"
+oddPads =
+    [ 10, 25, 45 ]
+
+
+rowsThing =
+    List.map2 wholeRow rowSentences oddPads
 
 
 view model =
     Element.layout stylesheet <|
-        column NoStyle
-            []
-            [ titleElement
-            , wholeRow rowSentence1 10
-            , wholeRow rowSentence2 25
-            ]
+        column NoStyle [] <|
+            titleElement
+                :: rowsThing
 
 
 
